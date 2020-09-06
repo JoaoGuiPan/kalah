@@ -1,4 +1,12 @@
-/* You can add global styles to this file, and also import other style files */
+@import "~flexboxgrid/css/index.min.css";
+@import "~flexboxgrid/css/flexboxgrid.css";
+
+@import  './style/default.scss';
+@import './style/colors.scss';
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; overflow: hidden; }
+
+.full-width {
+  width: 100%;
+}
