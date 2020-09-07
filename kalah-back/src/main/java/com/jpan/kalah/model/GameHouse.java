@@ -1,5 +1,6 @@
 package com.jpan.kalah.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.Embeddable;
@@ -10,13 +11,10 @@ import javax.validation.constraints.NotNull;
 import static com.jpan.kalah.common.CONSTANTS.DEFAULT_STARTING_NUM_SEEDS_PER_HOUSE;
 
 @Embeddable
-@Getter
-@Setter
-@ToString
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
 public class GameHouse {
 
     private boolean isPlayerStash = false;
@@ -31,15 +29,13 @@ public class GameHouse {
     @NotBlank
     private String playerName;
 
-    @ToString.Exclude
     @NotNull
+    @JsonIgnore
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private GameHouse nextHouse;
 
     public void addSeeds(int numberOfSeeds) {
         this.numberOfSeeds += numberOfSeeds;
-    }
-
-    public void removeSeeds(int numberOfBeans) {
-        this.numberOfSeeds -= numberOfBeans;
     }
 }

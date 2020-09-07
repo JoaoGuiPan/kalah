@@ -1,25 +1,22 @@
 package com.jpan.kalah.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import static com.jpan.kalah.common.CONSTANTS.*;
 
+@Data
 @Entity
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
 public class GameMatch {
 
     @Id
@@ -30,9 +27,15 @@ public class GameMatch {
     @Min(DEFAULT_STARTING_NUM_SEEDS_PER_HOUSE)
     private int startingNumberOfSeedsPerHouse = DEFAULT_STARTING_NUM_SEEDS_PER_HOUSE;
 
+    @Embedded
+    @JsonIgnore
+    @EqualsAndHashCode.Exclude
     @NotNull
     private GameHouse firstHouse;
 
+    @Embedded
+    @JsonIgnore
+    @EqualsAndHashCode.Exclude
     @NotNull
     private GameHouse lastHouse;
 
@@ -78,6 +81,20 @@ public class GameMatch {
         this.northPlayer = northPlayer;
         this.startingNumberOfSeedsPerHouse = startingNumberOfSeedsPerHouse;
         this.populateBoard();
+    }
+
+    @JsonGetter
+    public List<GameHouse> getBoard() {
+        List<GameHouse> board = new ArrayList<>();
+
+        GameHouse current = this.firstHouse;
+
+        do {
+            board.add(current);
+            current = current.getNextHouse();
+        } while (current != this.firstHouse);
+
+        return board;
     }
 
     public GameHouse getHouse(final int index) {
