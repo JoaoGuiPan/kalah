@@ -1,5 +1,6 @@
 package com.jpan.kalah.dto;
 
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.Value;
 
@@ -13,11 +14,12 @@ import static com.jpan.kalah.common.CONSTANTS.DEFAULT_STARTING_NUM_SEEDS_PER_HOU
 
 @Value
 @ToString
+@NoArgsConstructor
 public class StartGameDto {
 
     @NotNull
     @NotBlank
-    String southPlayer;
+    String southPlayer = null;
 
     @NotNull
     @NotBlank
