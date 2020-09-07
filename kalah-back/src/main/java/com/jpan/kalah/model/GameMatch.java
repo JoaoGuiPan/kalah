@@ -9,10 +9,12 @@ import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
-import static com.jpan.kalah.common.CONSTANTS.DEFAULT_NUM_HOUSES;
-import static com.jpan.kalah.common.CONSTANTS.DEFAULT_STARTING_NUM_SEEDS_PER_HOUSE;
+import static com.jpan.kalah.common.CONSTANTS.*;
 
 @Entity
 @Getter
@@ -32,29 +34,55 @@ public class GameMatch {
     @Min(DEFAULT_STARTING_NUM_SEEDS_PER_HOUSE)
     private int startingNumberOfSeedsPerHouse = DEFAULT_STARTING_NUM_SEEDS_PER_HOUSE;
 
-    @NotEmpty
+    @NotNull
     private GameHouse firstHouse;
 
-    @NotEmpty
+    @NotNull
     private GameHouse lastHouse;
 
-    @NotEmpty
-    @NotBlank
-    private String northPlayer;
-
-    @NotEmpty
+    @NotNull
     @NotBlank
     private String southPlayer;
 
+    @NotNull
+    @NotBlank
+    private String northPlayer = COMPUTER_PLAYER;
+
     private String currentTurnPlayer;
+
+    private Date lastTurnTimestamp;
 
     private boolean isActive = true;
 
     private String winner;
 
-    public GameMatch(final String northPlayer, final String southPlayer) {
-        this.northPlayer = northPlayer;
+    // match vs computer
+    public GameMatch(final String southPlayer) {
         this.southPlayer = southPlayer;
+        this.populateBoard();
+    }
+
+    // match vs computer
+    public GameMatch(final String southPlayer, final int numberOfHouses, final int startingNumberOfSeedsPerHouse) {
+        this.southPlayer = southPlayer;
+        this.numberOfHouses = numberOfHouses;
+        this.startingNumberOfSeedsPerHouse = startingNumberOfSeedsPerHouse;
+        this.populateBoard();
+    }
+
+    // multiplayer match
+    public GameMatch(final String southPlayer, final String northPlayer) {
+        this.southPlayer = southPlayer;
+        this.northPlayer = northPlayer;
+        this.populateBoard();
+    }
+
+    // multiplayer match
+    public GameMatch(final String southPlayer, final String northPlayer, final int numberOfHouses, final int startingNumberOfSeedsPerHouse) {
+        this.southPlayer = southPlayer;
+        this.northPlayer = northPlayer;
+        this.numberOfHouses = numberOfHouses;
+        this.startingNumberOfSeedsPerHouse = startingNumberOfSeedsPerHouse;
         this.populateBoard();
     }
 
@@ -99,12 +127,14 @@ public class GameMatch {
         int remainingSeeds = 0;
 
         GameHouse current = this.firstHouse;
-        if (this.firstHouse != null) {
-            while (current.getPlayerName().equalsIgnoreCase(this.getCurrentTurnPlayer())
-                    && !current.isPlayerStash() && current != this.firstHouse) {
-                remainingSeeds += current.getNumberOfSeeds();
+
+        if (current != null) {
+            do {
+                if (current.getPlayerName().equalsIgnoreCase(this.getCurrentTurnPlayer()) && !current.isPlayerStash()) {
+                    remainingSeeds += current.getNumberOfSeeds();
+                }
                 current = current.getNextHouse();
-            }
+            } while (current != this.firstHouse);
         }
 
         return remainingSeeds == 0;
@@ -127,7 +157,7 @@ public class GameMatch {
                 .playerName(playerName)
                 .isPlayerStash(isPlayerStash)
                 .index(index)
-                .numberOfSeeds(this.startingNumberOfSeedsPerHouse)
+                .numberOfSeeds(isPlayerStash ? 0 : this.startingNumberOfSeedsPerHouse)
                 .build();
 
         if (this.firstHouse == null) {
@@ -137,15 +167,21 @@ public class GameMatch {
         }
 
         this.lastHouse = gameHouse;
-        this.lastHouse.setNextHouse(gameHouse);
+        this.lastHouse.setNextHouse(this.firstHouse);
     }
 
     private void populateBoard() {
-        int indexOffset = -DEFAULT_NUM_HOUSES;
-        for (final String playerName: Arrays.asList(this.southPlayer, this.northPlayer)) {
-            indexOffset += DEFAULT_NUM_HOUSES;
+
+        int indexOffset = -this.numberOfHouses;
+
+        final List<String> players = Arrays.asList(this.southPlayer, this.northPlayer);
+        for (int p = 0; p < players.size(); p++) {
+
+            indexOffset += (this.numberOfHouses + p);
+
             for (int i = 0; i <= this.numberOfHouses; i++) {
-                this.addHouse(playerName, i == this.numberOfHouses, i + indexOffset);
+
+                this.addHouse(players.get(p), i == (this.numberOfHouses), i + indexOffset);
             }
         }
     }

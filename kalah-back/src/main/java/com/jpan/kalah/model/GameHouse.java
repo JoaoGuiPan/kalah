@@ -5,7 +5,7 @@ import lombok.*;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import static com.jpan.kalah.common.CONSTANTS.DEFAULT_STARTING_NUM_SEEDS_PER_HOUSE;
 
@@ -27,11 +27,12 @@ public class GameHouse {
     @Min(0)
     private int index = 0;
 
-    @NotEmpty
+    @NotNull
     @NotBlank
     private String playerName;
 
-    @NotEmpty
+    @ToString.Exclude
+    @NotNull
     private GameHouse nextHouse;
 
     public void addSeeds(int numberOfSeeds) {

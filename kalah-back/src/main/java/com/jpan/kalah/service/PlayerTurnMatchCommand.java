@@ -6,18 +6,22 @@ import com.jpan.kalah.model.GameMatch;
 import com.jpan.kalah.model.PlayerTurn;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
+import static java.util.Objects.requireNonNullElse;
+
 @Service
-public class PlayerTurnCommand {
+public class PlayerTurnMatchCommand {
 
     private final UpdateRepository<GameMatch> updateMatch;
 
-    public PlayerTurnCommand(UpdateRepository<GameMatch> updateMatch) {
+    public PlayerTurnMatchCommand(UpdateRepository<GameMatch> updateMatch) {
         this.updateMatch = updateMatch;
     }
 
     public GameMatch execute(PlayerTurn turn, GameMatch currentMatch) {
 
-        if (currentMatch.isActive() && currentMatch.getWinner() != null) {
+        if (currentMatch.isActive() && currentMatch.getWinner() == null) {
 
             currentMatch.setCurrentTurnPlayer(turn.getPlayerName());
 
@@ -27,7 +31,9 @@ public class PlayerTurnCommand {
 
             endTurn(currentMatch);
 
-            return this.updateMatch.update(currentMatch);
+            this.updateMatch.update(currentMatch);
+
+            return currentMatch;
         }
 
         // TODO THROW EXCEPTION
@@ -37,18 +43,18 @@ public class PlayerTurnCommand {
     private void sowSeeds(PlayerTurn turn, GameHouse selected, GameMatch currentMatch) {
         if (!selected.isPlayerStash() && houseBelongsToPlayer(turn, selected) && selected.getNumberOfSeeds() > 0) {
 
-            GameHouse next;
+            GameHouse next = null;
 
             int seedsToSow = selected.getNumberOfSeeds();
 
             for (int i = 0; i < seedsToSow; i++) {
 
-                next = selected.getNextHouse();
+                next = requireNonNullElse(next, selected).getNextHouse();
 
                 if (houseBelongsToPlayer(turn, next) || (!houseBelongsToPlayer(turn, next) && !next.isPlayerStash())) {
 
-                    // is final seed and is empty
-                    if (i == seedsToSow - 1 && next.getNumberOfSeeds() == 0) {
+                    // is final seed, is not stash and is empty
+                    if (i == seedsToSow - 1 && !next.isPlayerStash() && next.getNumberOfSeeds() == 0) {
                         captureOpposingSeeds(turn, currentMatch, next);
                     } else {
                         next.addSeeds(1);
@@ -100,6 +106,8 @@ public class PlayerTurnCommand {
                             ? currentMatch.getNorthPlayer()
                             : currentMatch.getSouthPlayer()
             );
+
+            currentMatch.setLastTurnTimestamp(new Date());
         }
     }
 
