@@ -8,7 +8,6 @@ import lombok.ToString;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.Date;
@@ -27,9 +26,6 @@ public class GameMatch {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "game_match_seq")
     @SequenceGenerator(name = "game_match_seq", allocationSize = 1)
     Long id;
-
-    @Min(DEFAULT_NUM_HOUSES)
-    private int numberOfHouses = DEFAULT_NUM_HOUSES;
 
     @Min(DEFAULT_STARTING_NUM_SEEDS_PER_HOUSE)
     private int startingNumberOfSeedsPerHouse = DEFAULT_STARTING_NUM_SEEDS_PER_HOUSE;
@@ -63,9 +59,8 @@ public class GameMatch {
     }
 
     // match vs computer
-    public GameMatch(final String southPlayer, final int numberOfHouses, final int startingNumberOfSeedsPerHouse) {
+    public GameMatch(final String southPlayer, final int startingNumberOfSeedsPerHouse) {
         this.southPlayer = southPlayer;
-        this.numberOfHouses = numberOfHouses;
         this.startingNumberOfSeedsPerHouse = startingNumberOfSeedsPerHouse;
         this.populateBoard();
     }
@@ -78,10 +73,9 @@ public class GameMatch {
     }
 
     // multiplayer match
-    public GameMatch(final String southPlayer, final String northPlayer, final int numberOfHouses, final int startingNumberOfSeedsPerHouse) {
+    public GameMatch(final String southPlayer, final String northPlayer, final int startingNumberOfSeedsPerHouse) {
         this.southPlayer = southPlayer;
         this.northPlayer = northPlayer;
-        this.numberOfHouses = numberOfHouses;
         this.startingNumberOfSeedsPerHouse = startingNumberOfSeedsPerHouse;
         this.populateBoard();
     }
@@ -102,7 +96,7 @@ public class GameMatch {
     public GameHouse getOpposingHouse(GameHouse selected) {
         if (!selected.isPlayerStash()) {
             // TODO EXPLAIN REASONING
-            return this.getHouse((2 * this.numberOfHouses) - selected.getIndex());
+            return this.getHouse((2 * NUM_HOUSES) - selected.getIndex());
         }
 
         // no opposing house if player stash
@@ -172,16 +166,16 @@ public class GameMatch {
 
     private void populateBoard() {
 
-        int indexOffset = -this.numberOfHouses;
+        int indexOffset = -NUM_HOUSES;
 
         final List<String> players = Arrays.asList(this.southPlayer, this.northPlayer);
         for (int p = 0; p < players.size(); p++) {
 
-            indexOffset += (this.numberOfHouses + p);
+            indexOffset += (NUM_HOUSES + p);
 
-            for (int i = 0; i <= this.numberOfHouses; i++) {
+            for (int i = 0; i <= NUM_HOUSES; i++) {
 
-                this.addHouse(players.get(p), i == (this.numberOfHouses), i + indexOffset);
+                this.addHouse(players.get(p), i == (NUM_HOUSES), i + indexOffset);
             }
         }
     }

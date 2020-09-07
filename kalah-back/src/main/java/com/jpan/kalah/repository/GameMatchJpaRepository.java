@@ -1,13 +1,15 @@
 package com.jpan.kalah.repository;
 
 import com.jpan.kalah.common.CreateRepository;
-import com.jpan.kalah.common.DeleteRepository;
+import com.jpan.kalah.common.ListRepository;
 import com.jpan.kalah.common.UpdateRepository;
 import com.jpan.kalah.model.GameMatch;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
-public class GameMatchJpaRepository implements CreateRepository<GameMatch>, UpdateRepository<GameMatch>, DeleteRepository<GameMatch> {
+public class GameMatchJpaRepository implements CreateRepository<GameMatch>, UpdateRepository<GameMatch>, ListRepository<GameMatch> {
 
     private GameMatchRepository repository;
 
@@ -23,12 +25,12 @@ public class GameMatchJpaRepository implements CreateRepository<GameMatch>, Upda
     }
 
     @Override
-    public void delete(GameMatch entity) {
-        this.repository.delete(entity);
+    public GameMatch update(GameMatch entity) {
+        return this.repository.save(entity);
     }
 
     @Override
-    public GameMatch update(GameMatch entity) {
-        return this.repository.save(entity);
+    public List<GameMatch> listAll() {
+        return this.repository.findAll();
     }
 }

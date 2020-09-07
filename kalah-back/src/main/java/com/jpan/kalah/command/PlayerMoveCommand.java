@@ -1,47 +1,39 @@
-package com.jpan.kalah.service;
+package com.jpan.kalah.command;
 
-import com.jpan.kalah.common.UpdateRepository;
+import com.jpan.kalah.common.Command;
 import com.jpan.kalah.model.GameHouse;
 import com.jpan.kalah.model.GameMatch;
-import com.jpan.kalah.model.PlayerTurn;
-import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
 import static java.util.Objects.requireNonNullElse;
 
-@Service
-public class PlayerTurnMatchCommand {
+public class PlayerMoveCommand implements Command {
 
-    private final UpdateRepository<GameMatch> updateMatch;
+    private final int houseIndex;
+    private final GameMatch currentMatch;
 
-    public PlayerTurnMatchCommand(UpdateRepository<GameMatch> updateMatch) {
-        this.updateMatch = updateMatch;
+    public PlayerMoveCommand(final int houseIndex, final GameMatch currentMatch) {
+        this.houseIndex = houseIndex;
+        this.currentMatch = currentMatch;
     }
 
-    public GameMatch execute(PlayerTurn turn, GameMatch currentMatch) {
+    @Override
+    public void execute() {
 
         if (currentMatch.isActive() && currentMatch.getWinner() == null) {
 
-            currentMatch.setCurrentTurnPlayer(turn.getPlayerName());
+            GameHouse selected = currentMatch.getHouse(houseIndex);
 
-            GameHouse selected = currentMatch.getHouse(turn.getHouseIndex());
-
-            sowSeeds(turn, selected, currentMatch);
+            sowSeeds(selected);
 
             endTurn(currentMatch);
-
-            this.updateMatch.update(currentMatch);
-
-            return currentMatch;
         }
-
-        // TODO THROW EXCEPTION
-        return null;
     }
 
-    private void sowSeeds(PlayerTurn turn, GameHouse selected, GameMatch currentMatch) {
-        if (!selected.isPlayerStash() && houseBelongsToPlayer(turn, selected) && selected.getNumberOfSeeds() > 0) {
+    private void sowSeeds(GameHouse selected) {
+
+        if (!selected.isPlayerStash() && houseBelongsToPlayer(selected) && selected.getNumberOfSeeds() > 0) {
 
             GameHouse next = null;
 
@@ -51,16 +43,16 @@ public class PlayerTurnMatchCommand {
 
                 next = requireNonNullElse(next, selected).getNextHouse();
 
-                if (houseBelongsToPlayer(turn, next) || (!houseBelongsToPlayer(turn, next) && !next.isPlayerStash())) {
+                if (houseBelongsToPlayer(next) || (!houseBelongsToPlayer(next) && !next.isPlayerStash())) {
 
                     // is final seed, is not stash and is empty
                     if (i == seedsToSow - 1 && !next.isPlayerStash() && next.getNumberOfSeeds() == 0) {
-                        captureOpposingSeeds(turn, currentMatch, next);
+                        captureOpposingSeeds(next);
                     } else {
                         next.addSeeds(1);
                     }
 
-                } else if (!houseBelongsToPlayer(turn, next) && next.isPlayerStash()) {
+                } else if (!houseBelongsToPlayer(next) && next.isPlayerStash()) {
                     // cannot add seed to other player's stash, will add to the next house
                     seedsToSow++;
                 }
@@ -70,18 +62,18 @@ public class PlayerTurnMatchCommand {
         }
     }
 
-    private void captureOpposingSeeds(PlayerTurn turn, GameMatch currentMatch, GameHouse next) {
+    private void captureOpposingSeeds(GameHouse next) {
         GameHouse opposingHouse = currentMatch.getOpposingHouse(next);
 
         int seedsToAdd = opposingHouse.getNumberOfSeeds() + 1;
 
-        currentMatch.getPlayerStash(turn.getPlayerName()).addSeeds(seedsToAdd);
+        currentMatch.getPlayerStash(currentMatch.getCurrentTurnPlayer()).addSeeds(seedsToAdd);
 
         opposingHouse.setNumberOfSeeds(0);
     }
 
-    private boolean houseBelongsToPlayer(PlayerTurn turn, GameHouse house) {
-        return house.getPlayerName().equalsIgnoreCase(turn.getPlayerName());
+    private boolean houseBelongsToPlayer(GameHouse house) {
+        return house.getPlayerName().equalsIgnoreCase(currentMatch.getCurrentTurnPlayer());
     }
 
     private void endTurn(GameMatch currentMatch) {
