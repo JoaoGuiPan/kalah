@@ -149,8 +149,10 @@ public class GameMatchDto {
         GameHouseDto current = this.firstHouse;
         if (this.firstHouse != null) {
             do {
-                GameHouseDto playerStash = this.getPlayerStash(current.getPlayerName());
-                playerStash.addSeeds(current.getNumberOfSeeds());
+                if (!current.isPlayerStash()) {
+                    GameHouseDto playerStash = this.getPlayerStash(current.getPlayerName());
+                    playerStash.addSeeds(current.getNumberOfSeeds());
+                }
                 current = current.getNextHouse();
             } while (current != this.firstHouse);
         }
