@@ -105,12 +105,7 @@ public class GameMatchDto {
     }
 
     public GameHouseDto getOpposingHouse(GameHouseDto selected) {
-        if (!selected.isPlayerStash()) {
-            return this.getHouse((2 * NUM_HOUSES) - selected.getIndex());
-        }
-
-        // no opposing house if player stash
-        return null;
+        return this.getHouse((2 * NUM_HOUSES) - selected.getIndex());
     }
 
     public GameHouseDto getPlayerStash(String playerName) {

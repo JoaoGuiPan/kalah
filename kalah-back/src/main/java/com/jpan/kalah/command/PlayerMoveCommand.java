@@ -76,11 +76,13 @@ public class PlayerMoveCommand implements Command {
     private void captureOpposingSeeds(GameHouseDto next) {
         GameHouseDto opposingHouse = currentMatch.getOpposingHouse(next);
 
-        int seedsToAdd = opposingHouse.getNumberOfSeeds() + 1;
+        if (opposingHouse.getNumberOfSeeds() > 0) {
+            int seedsToAdd = opposingHouse.getNumberOfSeeds() + 1;
 
-        currentMatch.getPlayerStash(currentMatch.getCurrentTurnPlayer()).addSeeds(seedsToAdd);
+            currentMatch.getPlayerStash(currentMatch.getCurrentTurnPlayer()).addSeeds(seedsToAdd);
 
-        opposingHouse.setNumberOfSeeds(0);
+            opposingHouse.setNumberOfSeeds(0);
+        }
     }
 
     private boolean houseBelongsToPlayer(GameHouseDto house) {
