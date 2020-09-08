@@ -62,7 +62,7 @@ public class GameMatchController {
     @ApiOperation(value = "Execute move by Match id.")
     @PutMapping("/{match}")
     GameMatchDto move(@PathVariable GameMatch match, @RequestBody TurnDto turn) {
-        logger.info("Updating Match ID " + match.getId());
+        logger.info("Updating Match ID " + match.getId() + ". House moved is " + turn.getHouseMoved());
         return matchUpdate.update(match, turn.getHouseMoved());
     }
 }

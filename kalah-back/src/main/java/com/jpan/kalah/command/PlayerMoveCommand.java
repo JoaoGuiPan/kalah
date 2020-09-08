@@ -25,13 +25,15 @@ public class PlayerMoveCommand implements Command {
 
             GameHouseDto selected = currentMatch.getHouse(houseIndex);
 
-            sowSeeds(selected);
+            boolean finalSeedIsStash = sowSeeds(selected);
 
-            endTurn(currentMatch);
+            endTurn(currentMatch, finalSeedIsStash);
         }
     }
 
-    private void sowSeeds(GameHouseDto selected) {
+    private boolean sowSeeds(GameHouseDto selected) {
+
+        boolean finalSeedIsStash = false;
 
         if (!selected.isPlayerStash() && houseBelongsToPlayer(selected) && selected.getNumberOfSeeds() > 0) {
 
@@ -45,11 +47,14 @@ public class PlayerMoveCommand implements Command {
 
                 if (houseBelongsToPlayer(next) || (!houseBelongsToPlayer(next) && !next.isPlayerStash())) {
 
-                    // is final seed, is not stash and is empty
-                    if (i == seedsToSow - 1 && !next.isPlayerStash() && next.getNumberOfSeeds() == 0) {
+                    // is final seed, is empty, belongs to player and is not stash
+                    if (i == seedsToSow - 1 && canCaptureOpposingSeeds(next)) {
                         captureOpposingSeeds(next);
                     } else {
                         next.addSeeds(1);
+                        if (i == seedsToSow - 1) {
+                            finalSeedIsStash = next.isPlayerStash();
+                        }
                     }
 
                 } else if (!houseBelongsToPlayer(next) && next.isPlayerStash()) {
@@ -60,6 +65,12 @@ public class PlayerMoveCommand implements Command {
 
             selected.setNumberOfSeeds(0);
         }
+
+        return finalSeedIsStash;
+    }
+
+    private boolean canCaptureOpposingSeeds(GameHouseDto next) {
+        return next.getNumberOfSeeds() == 0 && houseBelongsToPlayer(next) && !next.isPlayerStash();
     }
 
     private void captureOpposingSeeds(GameHouseDto next) {
@@ -76,7 +87,7 @@ public class PlayerMoveCommand implements Command {
         return house.getPlayerName().equalsIgnoreCase(currentMatch.getCurrentTurnPlayer());
     }
 
-    private void endTurn(GameMatchDto currentMatch) {
+    private void endTurn(GameMatchDto currentMatch, boolean finalSeedIsStash) {
 
         if (currentMatch.checkGameOver()) {
 
@@ -93,14 +104,21 @@ public class PlayerMoveCommand implements Command {
 
         } else {
 
-            currentMatch.setCurrentTurnPlayer(
-                    currentMatch.getSouthPlayer().equalsIgnoreCase(currentMatch.getCurrentTurnPlayer())
-                            ? currentMatch.getNorthPlayer()
-                            : currentMatch.getSouthPlayer()
-            );
+            currentMatch.setCurrentTurnPlayer(getCurrentTurnPlayer(currentMatch, finalSeedIsStash));
 
             currentMatch.setLastTurnTimestamp(new Date());
         }
+    }
+
+    private String getCurrentTurnPlayer(GameMatchDto currentMatch, boolean finalSeedIsStash) {
+
+        if (finalSeedIsStash) {
+            return currentMatch.getCurrentTurnPlayer();
+        }
+
+        return currentMatch.getSouthPlayer().equalsIgnoreCase(currentMatch.getCurrentTurnPlayer())
+                ? currentMatch.getNorthPlayer()
+                : currentMatch.getSouthPlayer();
     }
 
     private int getPlayerFinalScore(String playerName, GameMatchDto currentMatch) {

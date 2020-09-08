@@ -18,7 +18,11 @@ public class ComputerMoveCommand implements Command {
     @Override
     public void execute() {
 
-        int houseIndex = selectHouse();
+        int houseIndex;
+
+        do {
+            houseIndex = selectHouse();
+        } while (currentMatch.getHouse(houseIndex).getNumberOfSeeds() == 0);
 
         final PlayerMoveCommand command = new PlayerMoveCommand(houseIndex, currentMatch);
 
