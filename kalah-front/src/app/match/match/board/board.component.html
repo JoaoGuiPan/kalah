@@ -1,83 +1,26 @@
-<div class="row center-xs board-container" style="width: 800px;">
+<h1>Current Player: {{match && match.currentTurnPlayer}}</h1>
+
+<h2>{{match && match.northPlayer}}</h2>
+
+<div class="row center-xs board-container" style="width: 1000px;">
 
   <div class="col-xs-2">
-    <mat-card class="mancala">
-    </mat-card>
+    <app-house [playerStash]="true" [numberOfSeeds]="northPlayerScore"></app-house>
   </div>
 
   <div class="col-xs-8">
 
-    <div class="row">
+    <div class="row middle-xs">
 
-      <div class="col-xs-12">
+      <div *ngFor="let house of northPlayerBoard" class="col-xs-2 clickable" (click)="playMove(house)">
         <div class="row">
-
-          <div class="col-xs-2">
-            <mat-card class="house">
-            </mat-card>
-          </div>
-
-          <div class="col-xs-2">
-            <mat-card class="house">
-            </mat-card>
-          </div>
-
-          <div class="col-xs-2">
-            <mat-card class="house">
-            </mat-card>
-          </div>
-
-          <div class="col-xs-2">
-            <mat-card class="house">
-            </mat-card>
-          </div>
-
-          <div class="col-xs-2">
-            <mat-card class="house">
-            </mat-card>
-          </div>
-
-          <div class="col-xs-2">
-            <mat-card class="house">
-            </mat-card>
-          </div>
-
+          <app-house class="col-xs-12" [numberOfSeeds]="house.numberOfSeeds"></app-house>
         </div>
       </div>
 
-      <div class="col-xs-12" style="padding-top: 2em;">
+      <div *ngFor="let house of southPlayerBoard" class="col-xs-2 clickable" (click)="playMove(house)">
         <div class="row">
-
-          <div class="col-xs-2">
-            <mat-card class="house">
-            </mat-card>
-          </div>
-
-          <div class="col-xs-2">
-            <mat-card class="house">
-            </mat-card>
-          </div>
-
-          <div class="col-xs-2">
-            <mat-card class="house">
-            </mat-card>
-          </div>
-
-          <div class="col-xs-2">
-            <mat-card class="house">
-            </mat-card>
-          </div>
-
-          <div class="col-xs-2">
-            <mat-card class="house">
-            </mat-card>
-          </div>
-
-          <div class="col-xs-2">
-            <mat-card class="house">
-            </mat-card>
-          </div>
-
+          <app-house class="col-xs-12" [numberOfSeeds]="house.numberOfSeeds"></app-house>
         </div>
       </div>
 
@@ -86,7 +29,8 @@
   </div>
 
   <div class="col-xs-2">
-    <mat-card class="mancala">
-    </mat-card>
+    <app-house [playerStash]="true" [numberOfSeeds]="southPlayerScore"></app-house>
   </div>
 </div>
+
+<h2>{{match && match.southPlayer}}</h2>

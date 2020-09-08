@@ -10,3 +10,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; overflow: h
 .full-width {
   width: 100%;
 }
+
+.clickable {
+  cursor: pointer;
+  &:hover {
+    background-color: whitesmoke;
+  }
+}

@@ -1,0 +1,18 @@
+@import '../../../../../style/colors.scss';
+
+.house {
+  background-color: $board-house-bkg;
+  height: 200px;
+
+  &-mancala {
+    background-color: $board-house-bkg;
+    height: 500px;
+  }
+}
+
+.house-bean {
+  height: 25px;
+  width: 25px;
+  background-color: $board-bean-bkg;
+  border-radius: 50%;
+}

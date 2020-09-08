@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Match } from 'src/app/model/match.model';
+import { House } from 'src/app/model/house.model';
+import { MatchService } from 'src/app/core/providers/match.service';
+import { Router } from '@angular/router';
+
+const COMPUTER_PLAYER = 'COMPUTER_PLAYER';
 
 @Component({
   selector: 'app-board',
@@ -7,9 +13,86 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BoardComponent implements OnInit {
 
-  constructor() { }
+  @Input()
+  match: Match | null;
 
-  ngOnInit(): void {
+  constructor(private matchService: MatchService, private router: Router) { }
+
+  async ngOnInit() {
+    if (this.match.currentTurnPlayer === COMPUTER_PLAYER) {
+      await this.computerPlayMove();
+    }
+  }
+
+  get northPlayerScore(): number {
+    if (this.match) {
+      return this.score(this.match.northPlayer);
+    }
+    return 0;
+  }
+
+  get southPlayerScore(): number {
+    if (this.match) {
+      return this.score(this.match.southPlayer);
+    }
+    return 0;
+  }
+
+  get northPlayerBoard(): House[] {
+    if (this.match) {
+      return this.playerBoard(this.match.northPlayer, true);
+    }
+    return [];
+  }
+
+  get southPlayerBoard(): House[] {
+    if (this.match) {
+      return this.playerBoard(this.match.southPlayer);
+    }
+    return [];
+  }
+
+  async playMove(house: House) {
+    if (house.playerName === this.match.currentTurnPlayer) {
+      this.match = await this.matchService.executeTurn(this.match.id, house.index).toPromise();
+
+      if (this.match.currentTurnPlayer === COMPUTER_PLAYER) {
+        setTimeout(async () => await this.computerPlayMove(), 1000);
+      }
+
+      this.checkGameOver();
+    }
+  }
+
+  private async computerPlayMove() {
+    this.match = await this.matchService.executeTurn(this.match.id).toPromise();
+
+    if (this.match.currentTurnPlayer === COMPUTER_PLAYER) {
+      setTimeout(async () => await this.computerPlayMove(), 1000);
+    }
+
+    this.checkGameOver();
+  }
+
+  private score(player: string): number {
+    return this.match.board.find(h => h.playerStash && h.playerName === player).numberOfSeeds;
+  }
+
+  private playerBoard(player: string, reverse = false): House[] {
+    const playerBoard = this.match.board.filter(h => !h.playerStash && h.playerName === player);
+
+    if (reverse) {
+      return playerBoard.sort((a, b) => b.index - a.index);
+    }
+
+    return playerBoard.sort((a, b) => a.index - b.index);
+  }
+
+  private checkGameOver() {
+    if (this.match.winner) {
+      alert('CONGRATULATIONS ' + this.match.winner + '!!!!');
+      this.router.navigateByUrl('');
+    }
   }
 
 }

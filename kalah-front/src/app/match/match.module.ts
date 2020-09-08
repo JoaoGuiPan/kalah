@@ -3,16 +3,17 @@ import { Routes, RouterModule } from '@angular/router';
 import { AppCommonModule } from '../common/app-common.module';
 import { MatchComponent } from './match/match.component';
 import { BoardComponent } from './match/board/board.component';
+import { HouseComponent } from './match/board/house/house.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: ':id',
     component: MatchComponent,
   },
 ];
 
 @NgModule({
-  declarations: [MatchComponent, BoardComponent],
+  declarations: [MatchComponent, BoardComponent, HouseComponent],
   imports: [
     AppCommonModule,
     RouterModule.forChild(routes),
