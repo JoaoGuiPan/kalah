@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { MatchService } from '../core/providers/match.service';
 import { Router } from '@angular/router';
+import {LOCAL_STORAGE, StorageService} from 'ngx-webstorage-service';
+
+const EXISTING_MATCH = 'EXISTING_MATCH';
 
 @Component({
   selector: 'app-home',
@@ -9,20 +12,29 @@ import { Router } from '@angular/router';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private matchService: MatchService, private router: Router) { }
+  currentMatch: string | null;
+
+  constructor(@Inject(LOCAL_STORAGE) private storageService: StorageService,
+              private matchService: MatchService, private router: Router) {
+     this.currentMatch = this.storageService.get(EXISTING_MATCH);
+  }
 
   ngOnInit(): void {
   }
 
+  resumeMatch() {
+    this.router.navigateByUrl(`match/${this.currentMatch}`);
+  }
+
   async startSinglePlayer() {
-    // TODO NAME
     const match = await this.matchService.startGame('Player 1').toPromise();
+    this.storageService.set(EXISTING_MATCH, match.id);
     this.router.navigateByUrl(`match/${match.id}`);
   }
 
   async startLocalMultiplayer() {
-    // TODO NAMES
     const match = await this.matchService.startGame('Player 1', 'Player 2').toPromise();
+    this.storageService.set(EXISTING_MATCH, match.id);
     this.router.navigateByUrl(`match/${match.id}`);
   }
 

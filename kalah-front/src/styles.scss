@@ -5,10 +5,14 @@
 @import './style/colors.scss';
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; overflow: hidden; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .full-width {
   width: 100%;
+}
+
+.full-height {
+  height: 100%;
 }
 
 .clickable {

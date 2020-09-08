@@ -4,15 +4,15 @@
   background-color: $board-house-bkg;
   height: 200px;
 
-  &-mancala {
+  &-stash {
     background-color: $board-house-bkg;
     height: 500px;
   }
 }
 
-.house-bean {
+.house-seed {
   height: 25px;
   width: 25px;
-  background-color: $board-bean-bkg;
+  background-color: $board-seed-bkg;
   border-radius: 50%;
 }

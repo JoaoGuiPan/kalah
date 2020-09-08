@@ -1,31 +1,34 @@
-<mat-card class="home-container">
-  <mat-card-title>
-    <!-- TODO i18n -->
-    Welcome to the Kalah Game!
-  </mat-card-title>
-  <mat-card-content>
-  </mat-card-content>
-  <mat-card-actions>
-    <div class="row center-xs">
+<div class="row center-xs">
+  <mat-card class="col-xs-10 col-sm-8 col-md-6 col-lg-4 home-container">
+    <mat-card-title>
+      <span class="row center-xs">
+        {{'home.title' | translate}}!
+      </span>
+    </mat-card-title>
+    <mat-card-content>
+    </mat-card-content>
+    <mat-card-actions>
+      <div class="row center-xs">
 
-      <div class="col-xs-12 option-btn">
-        <button mat-raised-button color="primary" disabled>
-          Resume Game
-        </button>
+        <div class="col-xs-12 option-btn">
+          <button mat-raised-button color="primary" (click)="resumeMatch()" [disabled]="!currentMatch">
+            {{'home.resume' | translate}}
+          </button>
+        </div>
+
+        <div class="col-xs-12 option-btn">
+          <button mat-raised-button color="accent" (click)="startSinglePlayer()">
+            {{'home.singleplayer' | translate}}
+          </button>
+        </div>
+
+        <div class="col-xs-12 option-btn">
+          <button mat-raised-button color="accent" (click)="startLocalMultiplayer()">
+            {{'home.multiplayer' | translate}}
+          </button>
+        </div>
+
       </div>
-
-      <div class="col-xs-12 option-btn">
-        <button mat-raised-button color="accent" (click)="startSinglePlayer()">
-          Single Player
-        </button>
-      </div>
-
-      <div class="col-xs-12 option-btn">
-        <button mat-raised-button color="accent" (click)="startLocalMultiplayer()">
-          Local Multi Player
-        </button>
-      </div>
-
-    </div>
-  </mat-card-actions>
-</mat-card>
+    </mat-card-actions>
+  </mat-card>
+</div>

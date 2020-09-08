@@ -1,27 +1,22 @@
-<mat-card *ngIf="match;else loading">
+<div class="row center-xs">
 
-  <mat-card-content>
-    <!-- TODO -->
-    <app-board [match]="match"></app-board>
-  </mat-card-content>
+  <mat-card *ngIf="match" class="col-xs-10 board-container">
 
-  <mat-card-actions>
-    <div class="row center-xs">
-      <button mat-raised-button color="primary">
-        Exit to Main Menu
-      </button>
-      <button mat-raised-button color="accent">
-        Restart
-      </button>
-      <button mat-raised-button color="warn">
-        Forfeit
-      </button>
-    </div>
-  </mat-card-actions>
-</mat-card>
+    <mat-card-content>
+      <app-board [match]="match"></app-board>
+    </mat-card-content>
 
-<ng-template #loading>
-  <mat-card>
-    <mat-spinner color="primary"></mat-spinner>
+    <mat-card-actions>
+      <div class="row center-xs">
+        <button mat-raised-button color="primary">
+          {{'match.exit' |translate}}
+        </button>
+        <button mat-raised-button color="warn">
+          {{'match.forfeit' |translate}}
+        </button>
+      </div>
+    </mat-card-actions>
   </mat-card>
-</ng-template>
+
+</div>
+

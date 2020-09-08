@@ -1,11 +1,11 @@
-<h1>Current Player: {{match && match.currentTurnPlayer}}</h1>
+<h1>{{'board.current' | translate}}: {{match && match.currentTurnPlayer}}</h1>
 
 <h2>{{match && match.northPlayer}}</h2>
 
-<div class="row center-xs board-container" style="width: 1000px;">
+<div class="row center-xs">
 
   <div class="col-xs-2">
-    <app-house [playerStash]="true" [numberOfSeeds]="northPlayerScore"></app-house>
+    <app-house [playerStash]="true" [numberOfSeeds]="northPlayerScore" [scoreAbove]="true"></app-house>
   </div>
 
   <div class="col-xs-8">
@@ -14,7 +14,7 @@
 
       <div *ngFor="let house of northPlayerBoard" class="col-xs-2 clickable" (click)="playMove(house)">
         <div class="row">
-          <app-house class="col-xs-12" [numberOfSeeds]="house.numberOfSeeds"></app-house>
+          <app-house class="col-xs-12" [numberOfSeeds]="house.numberOfSeeds" [scoreAbove]="true"></app-house>
         </div>
       </div>
 

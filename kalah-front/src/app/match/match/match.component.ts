@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MatchService } from 'src/app/core/providers/match.service';
 import { ActivatedRoute } from '@angular/router';
 import { Match } from 'src/app/model/match.model';
 
@@ -12,11 +11,11 @@ export class MatchComponent implements OnInit {
 
   match: Match | null;
 
-  constructor(private matchService: MatchService, private route: ActivatedRoute) { }
+  constructor(route: ActivatedRoute) {
+    route.data.subscribe(value => this.match = value.match);
+  }
 
-  async ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id');
-    this.match = await this.matchService.getMatchById(id).toPromise();
+  ngOnInit() {
   }
 
 }

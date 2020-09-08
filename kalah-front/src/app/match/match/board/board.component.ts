@@ -3,8 +3,7 @@ import { Match } from 'src/app/model/match.model';
 import { House } from 'src/app/model/house.model';
 import { MatchService } from 'src/app/core/providers/match.service';
 import { Router } from '@angular/router';
-
-const COMPUTER_PLAYER = 'COMPUTER_PLAYER';
+import { CONSTANTS } from 'src/app/common/constants';
 
 @Component({
   selector: 'app-board',
@@ -19,7 +18,7 @@ export class BoardComponent implements OnInit {
   constructor(private matchService: MatchService, private router: Router) { }
 
   async ngOnInit() {
-    if (this.match.currentTurnPlayer === COMPUTER_PLAYER) {
+    if (this.match.currentTurnPlayer === CONSTANTS.COMPUTER_PLAYER) {
       await this.computerPlayMove();
     }
   }
@@ -56,7 +55,7 @@ export class BoardComponent implements OnInit {
     if (house.playerName === this.match.currentTurnPlayer) {
       this.match = await this.matchService.executeTurn(this.match.id, house.index).toPromise();
 
-      if (this.match.currentTurnPlayer === COMPUTER_PLAYER) {
+      if (this.match.currentTurnPlayer === CONSTANTS.COMPUTER_PLAYER) {
         setTimeout(async () => await this.computerPlayMove(), 1000);
       }
 
@@ -67,7 +66,7 @@ export class BoardComponent implements OnInit {
   private async computerPlayMove() {
     this.match = await this.matchService.executeTurn(this.match.id).toPromise();
 
-    if (this.match.currentTurnPlayer === COMPUTER_PLAYER) {
+    if (this.match.currentTurnPlayer === CONSTANTS.COMPUTER_PLAYER) {
       setTimeout(async () => await this.computerPlayMove(), 1000);
     }
 
@@ -90,7 +89,7 @@ export class BoardComponent implements OnInit {
 
   private checkGameOver() {
     if (this.match.winner) {
-      alert('CONGRATULATIONS ' + this.match.winner + '!!!!');
+      alert('CONGRATULATIONS ' + this.match.winner + '!!!! Final score: ' + this.northPlayerScore + ' - ' + this.southPlayerScore);
       this.router.navigateByUrl('');
     }
   }

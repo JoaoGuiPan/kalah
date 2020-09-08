@@ -1,6 +1,9 @@
-<app-header></app-header>
-<div class="full-width app-content">
-  <div class="row center-xs full-width">
-    <router-outlet></router-outlet>
+<app-loader></app-loader>
+<div class="full-width">
+  <div class="row">
+    <app-header class="col-xs-12"></app-header>
+    <div class="col-xs-12 app-content">
+      <router-outlet></router-outlet>
+    </div>
   </div>
 </div>

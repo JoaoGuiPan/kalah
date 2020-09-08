@@ -1,0 +1,12 @@
+{
+  "language": "English",
+  "header.title": "The Kalah Game",
+  "header.menu.language": "Language",
+  "home.title": "Welcome to the Kalah game",
+  "home.resume": "Resume game",
+  "home.singleplayer": "New single player game",
+  "home.multiplayer": "New offline multiplayer game",
+  "match.exit": "Exit to main menu",
+  "match.forfeit": "Forfeit",
+  "board.current": "Current turn"
+}

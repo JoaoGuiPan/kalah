@@ -7,11 +7,21 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class HouseComponent implements OnInit {
 
+  seeds = [];
+
   @Input()
   playerStash = false;
 
   @Input()
-  numberOfSeeds = 0;
+  scoreAbove = false;
+
+  @Input()
+  set numberOfSeeds(numberOfSeeds: number) {
+    this.seeds = [];
+    for (let i = 0; i < numberOfSeeds; i++) {
+      this.seeds.push(0);
+    }
+  }
 
   constructor() { }
 

@@ -1,9 +1,20 @@
 
-<mat-card [ngClass]="{ house: !playerStash, 'house-mancala': playerStash }">
-  <!-- <div class="row center-xs">
-    <span *ngFor="let bean of numberOfSeeds" class="col-xs-1 house-bean"></span>
-  </div> -->
-</mat-card>
-<div>
-  {{numberOfSeeds}}
+<div class="row center-xs">
+  <div class="col-xs-12">
+    <h1>
+      {{scoreAbove ? seeds.length : ''}}
+    </h1>
+  </div>
+  <div class="col-xs-12">
+    <mat-card [ngClass]="{ house: !playerStash, 'house-stash': playerStash }">
+      <div class="row center-xs">
+        <span *ngFor="let seed of seeds" class="col-xs-1 house-seed"></span>
+      </div>
+    </mat-card>
+  </div>
+  <div class="col-xs-12">
+    <h1>
+      {{scoreAbove ? '' : seeds.length}}
+    </h1>
+  </div>
 </div>
