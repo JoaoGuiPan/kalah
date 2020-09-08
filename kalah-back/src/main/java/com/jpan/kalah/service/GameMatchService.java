@@ -3,7 +3,6 @@ package com.jpan.kalah.service;
 import com.jpan.kalah.command.ComputerMoveCommand;
 import com.jpan.kalah.command.PlayerMoveCommand;
 import com.jpan.kalah.common.*;
-import com.jpan.kalah.dto.EntityDtoMapper;
 import com.jpan.kalah.dto.GameMatchDto;
 import com.jpan.kalah.dto.StartGameDto;
 import com.jpan.kalah.model.GameMatch;
@@ -39,7 +38,7 @@ public class GameMatchService implements CreateService<StartGameDto, GameMatchDt
 
         final GameMatch match = createMatch.create(fromDto(matchDto));
 
-        return EntityDtoMapper.toDto(match);
+        return toDto(match);
     }
 
     @Override
@@ -57,10 +56,7 @@ public class GameMatchService implements CreateService<StartGameDto, GameMatchDt
 
         command.execute();
 
-        GameMatch fromDto = fromDto(dto);
-        fromDto.setId(entity.getId());
-
-        final GameMatch match = updateMatch.update(fromDto);
+        final GameMatch match = updateMatch.update(fromDto(dto));
 
         return toDto(match);
     }
