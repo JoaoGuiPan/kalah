@@ -32,13 +32,15 @@ public class GameMatchService implements CreateService<StartGameDto, GameMatchDt
     @Override
     public GameMatchDto create(StartGameDto entity) {
 
-        final GameMatchDto matchDto = new GameMatchDto(entity.getSouthPlayer(), entity.getNorthPlayer());
+        final GameMatchDto dto = new GameMatchDto(entity.getSouthPlayer(), entity.getNorthPlayer());
 
-        setFirstTurnPlayer(entity, matchDto);
+        setFirstTurnPlayer(entity, dto);
 
-        final GameMatch match = createMatch.create(fromDto(matchDto));
+        final GameMatch match = createMatch.create(fromDto(dto));
 
-        return toDto(match);
+        dto.setId(match.getId());
+
+        return dto;
     }
 
     @Override
@@ -56,9 +58,9 @@ public class GameMatchService implements CreateService<StartGameDto, GameMatchDt
 
         command.execute();
 
-        final GameMatch match = updateMatch.update(fromDto(dto));
+        updateMatch.update(fromDto(dto));
 
-        return toDto(match);
+        return dto;
     }
 
     private void setFirstTurnPlayer(StartGameDto entity, GameMatchDto gameMatch) {

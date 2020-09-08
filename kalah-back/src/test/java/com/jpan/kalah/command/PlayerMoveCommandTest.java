@@ -1,6 +1,5 @@
-package com.jpan.kalah.service;
+package com.jpan.kalah.command;
 
-import com.jpan.kalah.command.PlayerMoveCommand;
 import com.jpan.kalah.dto.GameMatchDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
