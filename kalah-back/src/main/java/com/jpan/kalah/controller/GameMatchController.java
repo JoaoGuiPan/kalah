@@ -2,6 +2,7 @@ package com.jpan.kalah.controller;
 
 import com.jpan.kalah.common.CreateService;
 import com.jpan.kalah.common.ListRepository;
+import com.jpan.kalah.common.UpdateRepository;
 import com.jpan.kalah.common.UpdateService;
 import com.jpan.kalah.dto.GameMatchDto;
 import com.jpan.kalah.dto.StartGameDto;
@@ -24,16 +25,18 @@ public class GameMatchController {
     private final Logger logger = LoggerFactory.getLogger(GameMatchController.class);
 
     private final CreateService<StartGameDto, GameMatchDto> matchCreate;
-    private final UpdateService<GameMatch, Integer, GameMatchDto> matchUpdate;
+    private final UpdateService<GameMatch, Integer, GameMatchDto> playMatchTurn;
     private final ListRepository<GameMatch> matchList;
+    private final UpdateRepository<GameMatch> updateMatch;
 
     public GameMatchController(CreateService<StartGameDto, GameMatchDto> matchCreate,
-                               UpdateService<GameMatch, Integer, GameMatchDto> matchUpdate,
-                               ListRepository<GameMatch> matchList
-                               ) {
+                               UpdateService<GameMatch, Integer, GameMatchDto> playMatchTurn,
+                               ListRepository<GameMatch> matchList,
+                               UpdateRepository<GameMatch> updateMatch) {
         this.matchCreate = matchCreate;
-        this.matchUpdate = matchUpdate;
+        this.playMatchTurn = playMatchTurn;
         this.matchList = matchList;
+        this.updateMatch = updateMatch;
     }
 
     @ApiOperation(value = "Create new Game.")
@@ -63,6 +66,12 @@ public class GameMatchController {
     @PutMapping("/{match}")
     GameMatchDto move(@PathVariable GameMatch match, @RequestBody TurnDto turn) {
         logger.info("Updating Match ID " + match.getId() + ". House moved is " + turn.getHouseMoved());
-        return matchUpdate.update(match, turn.getHouseMoved());
+        return playMatchTurn.update(match, turn.getHouseMoved());
+    }
+
+    @GetMapping("/{match}/deactivate")
+    void deactivate(@PathVariable GameMatch match) {
+        match.setActive(false);
+        updateMatch.update(match);
     }
 }
