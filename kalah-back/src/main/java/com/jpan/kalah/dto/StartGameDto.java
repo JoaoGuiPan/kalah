@@ -1,20 +1,20 @@
 package com.jpan.kalah.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
-import lombok.Value;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import static com.jpan.kalah.common.CONSTANTS.*;
+import static com.jpan.kalah.common.CONSTANTS.COMPUTER_PLAYER;
 import static com.jpan.kalah.common.CONSTANTS.DEFAULT_STARTING_NUM_SEEDS_PER_HOUSE;
 
-@Value
-@ToString
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class StartGameDto {
 
     @NotNull

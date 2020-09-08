@@ -25,9 +25,10 @@ public class PlayerMoveCommand implements Command {
 
             GameHouseDto selected = currentMatch.getHouse(houseIndex);
 
-            boolean finalSeedIsStash = sowSeeds(selected);
-
-            endTurn(currentMatch, finalSeedIsStash);
+            if (!selected.isPlayerStash() && houseBelongsToPlayer(selected) && selected.getNumberOfSeeds() > 0) {
+                boolean finalSeedIsStash = sowSeeds(selected);
+                endTurn(currentMatch, finalSeedIsStash);
+            }
         }
     }
 
@@ -35,54 +36,47 @@ public class PlayerMoveCommand implements Command {
 
         boolean finalSeedIsStash = false;
 
-        if (!selected.isPlayerStash() && houseBelongsToPlayer(selected) && selected.getNumberOfSeeds() > 0) {
+        GameHouseDto next = null;
 
-            GameHouseDto next = null;
+        int seedsToSow = selected.getNumberOfSeeds();
 
-            int seedsToSow = selected.getNumberOfSeeds();
+        for (int currentSeed = 1; currentSeed <= seedsToSow; currentSeed++) {
 
-            for (int i = 0; i < seedsToSow; i++) {
+            next = requireNonNullElse(next, selected).getNextHouse();
 
-                next = requireNonNullElse(next, selected).getNextHouse();
+            if (houseBelongsToPlayer(next) || (!houseBelongsToPlayer(next) && !next.isPlayerStash())) {
 
-                if (houseBelongsToPlayer(next) || (!houseBelongsToPlayer(next) && !next.isPlayerStash())) {
-
-                    // is final seed, is empty, belongs to player and is not stash
-                    if (i == seedsToSow - 1 && canCaptureOpposingSeeds(next)) {
-                        captureOpposingSeeds(next);
-                    } else {
-                        next.addSeeds(1);
-                        if (i == seedsToSow - 1) {
-                            finalSeedIsStash = next.isPlayerStash();
-                        }
+                // is final seed, is empty, belongs to player, is not stash and opposite is > 0
+                if (currentSeed == seedsToSow && canCaptureOpposingSeeds(next)) {
+                    captureOpposingSeeds(next);
+                } else {
+                    next.addSeeds(1);
+                    if (currentSeed == seedsToSow) {
+                        finalSeedIsStash = next.isPlayerStash();
                     }
-
-                } else if (!houseBelongsToPlayer(next) && next.isPlayerStash()) {
-                    // cannot add seed to other player's stash, will add to the next house
-                    seedsToSow++;
                 }
-            }
 
-            selected.setNumberOfSeeds(0);
+            } else if (!houseBelongsToPlayer(next) && next.isPlayerStash()) {
+                // cannot add seed to other player's stash, will add to the next house
+                seedsToSow++;
+            }
         }
+
+        selected.setNumberOfSeeds(0);
 
         return finalSeedIsStash;
     }
 
     private boolean canCaptureOpposingSeeds(GameHouseDto next) {
-        return next.getNumberOfSeeds() == 0 && houseBelongsToPlayer(next) && !next.isPlayerStash();
+        return next.getNumberOfSeeds() == 0 && houseBelongsToPlayer(next) && !next.isPlayerStash()
+                && currentMatch.getOpposingHouse(next).getNumberOfSeeds() > 0;
     }
 
     private void captureOpposingSeeds(GameHouseDto next) {
         GameHouseDto opposingHouse = currentMatch.getOpposingHouse(next);
-
-        if (opposingHouse.getNumberOfSeeds() > 0) {
-            int seedsToAdd = opposingHouse.getNumberOfSeeds() + 1;
-
-            currentMatch.getPlayerStash(currentMatch.getCurrentTurnPlayer()).addSeeds(seedsToAdd);
-
-            opposingHouse.setNumberOfSeeds(0);
-        }
+        GameHouseDto playerStash = currentMatch.getPlayerStash(currentMatch.getCurrentTurnPlayer());
+        playerStash.addSeeds(opposingHouse.getNumberOfSeeds() + 1);
+        opposingHouse.setNumberOfSeeds(0);
     }
 
     private boolean houseBelongsToPlayer(GameHouseDto house) {
@@ -97,10 +91,13 @@ public class PlayerMoveCommand implements Command {
 
             currentMatch.stashRemainingSeeds();
 
-            String winner = getPlayerFinalScore(currentMatch.getSouthPlayer(), currentMatch)
-                                > getPlayerFinalScore(currentMatch.getNorthPlayer(), currentMatch)
-                            ? currentMatch.getSouthPlayer()
-                            : currentMatch.getNorthPlayer();
+            int southPlayerFinalScore = getPlayerFinalScore(currentMatch.getSouthPlayer(), currentMatch);
+            int northPlayerFinalScore = getPlayerFinalScore(currentMatch.getNorthPlayer(), currentMatch);
+
+            String winner = southPlayerFinalScore == northPlayerFinalScore ? "TIE"
+                    : southPlayerFinalScore > northPlayerFinalScore
+                        ? currentMatch.getSouthPlayer()
+                        : currentMatch.getNorthPlayer();
 
             currentMatch.setWinner(winner);
 
