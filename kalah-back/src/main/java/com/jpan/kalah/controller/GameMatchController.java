@@ -5,6 +5,7 @@ import com.jpan.kalah.common.ListRepository;
 import com.jpan.kalah.common.UpdateService;
 import com.jpan.kalah.dto.GameMatchDto;
 import com.jpan.kalah.dto.StartGameDto;
+import com.jpan.kalah.dto.TurnDto;
 import com.jpan.kalah.model.GameMatch;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -60,8 +61,8 @@ public class GameMatchController {
 
     @ApiOperation(value = "Execute move by Match id.")
     @PutMapping("/{match}")
-    GameMatchDto move(@PathVariable GameMatch match, @RequestParam Integer houseMoved) {
+    GameMatchDto move(@PathVariable GameMatch match, @RequestBody TurnDto turn) {
         logger.info("Updating Match ID " + match.getId());
-        return matchUpdate.update(match, houseMoved);
+        return matchUpdate.update(match, turn.getHouseMoved());
     }
 }
