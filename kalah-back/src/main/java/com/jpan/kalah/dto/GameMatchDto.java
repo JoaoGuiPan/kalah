@@ -123,20 +123,25 @@ public class GameMatchDto {
 
     public boolean checkGameOver() {
 
-        int remainingSeeds = 0;
+        int northPlayerRemainingSeeds = 0;
+        int southPlayerRemainingSeeds = 0;
 
         GameHouseDto current = this.firstHouse;
 
         if (current != null) {
             do {
-                if (current.getPlayerName().equalsIgnoreCase(this.getCurrentTurnPlayer()) && !current.isPlayerStash()) {
-                    remainingSeeds += current.getNumberOfSeeds();
+                if (!current.isPlayerStash()) {
+                    if (current.getPlayerName().equalsIgnoreCase(northPlayer)) {
+                        northPlayerRemainingSeeds += current.getNumberOfSeeds();
+                    } else {
+                        southPlayerRemainingSeeds += current.getNumberOfSeeds();
+                    }
                 }
                 current = current.getNextHouse();
             } while (current != this.firstHouse);
         }
 
-        return remainingSeeds == 0;
+        return northPlayerRemainingSeeds == 0 || southPlayerRemainingSeeds == 0;
     }
 
     public void stashRemainingSeeds() {

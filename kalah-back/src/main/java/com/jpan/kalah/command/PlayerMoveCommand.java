@@ -88,8 +88,6 @@ public class PlayerMoveCommand implements Command {
 
         if (currentMatch.checkGameOver()) {
 
-            currentMatch.setActive(false);
-
             currentMatch.stashRemainingSeeds();
 
             int southPlayerFinalScore = getPlayerFinalScore(currentMatch.getSouthPlayer(), currentMatch);
@@ -101,6 +99,8 @@ public class PlayerMoveCommand implements Command {
                         : currentMatch.getNorthPlayer();
 
             currentMatch.setWinner(winner);
+
+            currentMatch.setActive(false);
 
         } else {
 
