@@ -1,8 +1,8 @@
 package com.jpan.kalah.command;
 
 import com.jpan.kalah.common.Command;
-import com.jpan.kalah.model.GameHouse;
-import com.jpan.kalah.model.GameMatch;
+import com.jpan.kalah.dto.GameHouseDto;
+import com.jpan.kalah.dto.GameMatchDto;
 
 import java.util.Date;
 
@@ -11,9 +11,9 @@ import static java.util.Objects.requireNonNullElse;
 public class PlayerMoveCommand implements Command {
 
     private final int houseIndex;
-    private final GameMatch currentMatch;
+    private final GameMatchDto currentMatch;
 
-    public PlayerMoveCommand(final int houseIndex, final GameMatch currentMatch) {
+    public PlayerMoveCommand(final int houseIndex, final GameMatchDto currentMatch) {
         this.houseIndex = houseIndex;
         this.currentMatch = currentMatch;
     }
@@ -23,7 +23,7 @@ public class PlayerMoveCommand implements Command {
 
         if (currentMatch.isActive() && currentMatch.getWinner() == null) {
 
-            GameHouse selected = currentMatch.getHouse(houseIndex);
+            GameHouseDto selected = currentMatch.getHouse(houseIndex);
 
             sowSeeds(selected);
 
@@ -31,11 +31,11 @@ public class PlayerMoveCommand implements Command {
         }
     }
 
-    private void sowSeeds(GameHouse selected) {
+    private void sowSeeds(GameHouseDto selected) {
 
         if (!selected.isPlayerStash() && houseBelongsToPlayer(selected) && selected.getNumberOfSeeds() > 0) {
 
-            GameHouse next = null;
+            GameHouseDto next = null;
 
             int seedsToSow = selected.getNumberOfSeeds();
 
@@ -62,8 +62,8 @@ public class PlayerMoveCommand implements Command {
         }
     }
 
-    private void captureOpposingSeeds(GameHouse next) {
-        GameHouse opposingHouse = currentMatch.getOpposingHouse(next);
+    private void captureOpposingSeeds(GameHouseDto next) {
+        GameHouseDto opposingHouse = currentMatch.getOpposingHouse(next);
 
         int seedsToAdd = opposingHouse.getNumberOfSeeds() + 1;
 
@@ -72,11 +72,11 @@ public class PlayerMoveCommand implements Command {
         opposingHouse.setNumberOfSeeds(0);
     }
 
-    private boolean houseBelongsToPlayer(GameHouse house) {
+    private boolean houseBelongsToPlayer(GameHouseDto house) {
         return house.getPlayerName().equalsIgnoreCase(currentMatch.getCurrentTurnPlayer());
     }
 
-    private void endTurn(GameMatch currentMatch) {
+    private void endTurn(GameMatchDto currentMatch) {
 
         if (currentMatch.checkGameOver()) {
 
@@ -103,7 +103,7 @@ public class PlayerMoveCommand implements Command {
         }
     }
 
-    private int getPlayerFinalScore(String playerName, GameMatch currentMatch) {
+    private int getPlayerFinalScore(String playerName, GameMatchDto currentMatch) {
         return currentMatch.getPlayerStash(playerName).getNumberOfSeeds();
     }
 }

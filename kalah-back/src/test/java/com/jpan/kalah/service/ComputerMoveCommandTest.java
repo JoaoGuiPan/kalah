@@ -2,7 +2,7 @@ package com.jpan.kalah.service;
 
 import com.jpan.kalah.command.ComputerMoveCommand;
 import com.jpan.kalah.common.Command;
-import com.jpan.kalah.model.GameMatch;
+import com.jpan.kalah.dto.GameMatchDto;
 import org.junit.jupiter.api.Test;
 
 import static com.jpan.kalah.Mocks.singlePlayerMatchTurnOneByComputer;
@@ -12,7 +12,7 @@ public class ComputerMoveCommandTest {
     @Test
     public void whenComputerTurnCommandIsExecutedThenCreateComputerTurn() {
 
-        GameMatch match = singlePlayerMatchTurnOneByComputer();
+        GameMatchDto match = singlePlayerMatchTurnOneByComputer();
         Command command = new ComputerMoveCommand(match);
         command.execute();
 

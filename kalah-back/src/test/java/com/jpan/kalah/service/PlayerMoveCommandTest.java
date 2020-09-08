@@ -1,7 +1,7 @@
 package com.jpan.kalah.service;
 
 import com.jpan.kalah.command.PlayerMoveCommand;
-import com.jpan.kalah.model.GameMatch;
+import com.jpan.kalah.dto.GameMatchDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +12,7 @@ public class PlayerMoveCommandTest {
     @Test
     void whenPlayerOneExecutesMoveThenSeedsWillBeSowed() {
 
-        GameMatch match = singlePlayerMatchTurnOneByPlayer();
+        GameMatchDto match = singlePlayerMatchTurnOneByPlayer();
 
         PlayerMoveCommand command = new PlayerMoveCommand(2, match);
 

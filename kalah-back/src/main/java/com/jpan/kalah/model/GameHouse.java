@@ -1,7 +1,8 @@
 package com.jpan.kalah.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
 import javax.validation.constraints.Min;
@@ -12,7 +13,6 @@ import static com.jpan.kalah.common.CONSTANTS.DEFAULT_STARTING_NUM_SEEDS_PER_HOU
 
 @Embeddable
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class GameHouse {
@@ -28,14 +28,4 @@ public class GameHouse {
     @NotNull
     @NotBlank
     private String playerName;
-
-    @NotNull
-    @JsonIgnore
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private GameHouse nextHouse;
-
-    public void addSeeds(int numberOfSeeds) {
-        this.numberOfSeeds += numberOfSeeds;
-    }
 }

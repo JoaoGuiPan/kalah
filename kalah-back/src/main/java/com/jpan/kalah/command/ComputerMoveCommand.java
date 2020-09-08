@@ -1,7 +1,7 @@
 package com.jpan.kalah.command;
 
 import com.jpan.kalah.common.Command;
-import com.jpan.kalah.model.GameMatch;
+import com.jpan.kalah.dto.GameMatchDto;
 
 import java.util.Random;
 
@@ -9,9 +9,9 @@ import static com.jpan.kalah.common.CONSTANTS.NUM_HOUSES;
 
 public class ComputerMoveCommand implements Command {
 
-    private final GameMatch currentMatch;
+    private final GameMatchDto currentMatch;
 
-    public ComputerMoveCommand(final GameMatch currentMatch) {
+    public ComputerMoveCommand(final GameMatchDto currentMatch) {
         this.currentMatch = currentMatch;
     }
 
@@ -20,7 +20,7 @@ public class ComputerMoveCommand implements Command {
 
         int houseIndex = selectHouse();
 
-        PlayerMoveCommand command = new PlayerMoveCommand(houseIndex, currentMatch);
+        final PlayerMoveCommand command = new PlayerMoveCommand(houseIndex, currentMatch);
 
         command.execute();
     }
