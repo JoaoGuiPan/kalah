@@ -6,6 +6,7 @@ import com.jpan.kalah.dto.GameMatchDto;
 
 import java.util.Date;
 
+import static com.jpan.kalah.common.CONSTANTS.TIED;
 import static java.util.Objects.requireNonNullElse;
 
 public class PlayerMoveCommand implements Command {
@@ -94,7 +95,7 @@ public class PlayerMoveCommand implements Command {
             int southPlayerFinalScore = getPlayerFinalScore(currentMatch.getSouthPlayer(), currentMatch);
             int northPlayerFinalScore = getPlayerFinalScore(currentMatch.getNorthPlayer(), currentMatch);
 
-            String winner = southPlayerFinalScore == northPlayerFinalScore ? "TIE"
+            String winner = southPlayerFinalScore == northPlayerFinalScore ? TIED
                     : southPlayerFinalScore > northPlayerFinalScore
                         ? currentMatch.getSouthPlayer()
                         : currentMatch.getNorthPlayer();
