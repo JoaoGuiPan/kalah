@@ -1,9 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Inject } from '@angular/core';
 import { Match } from 'src/app/model/match.model';
 import { House } from 'src/app/model/house.model';
 import { MatchService } from 'src/app/core/providers/match.service';
 import { Router } from '@angular/router';
 import { CONSTANTS } from 'src/app/common/constants';
+import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
 
 @Component({
   selector: 'app-board',
@@ -15,7 +16,8 @@ export class BoardComponent implements OnInit {
   @Input()
   match: Match | null;
 
-  constructor(private matchService: MatchService, private router: Router) { }
+  constructor(private matchService: MatchService, private router: Router,
+              @Inject(LOCAL_STORAGE) private storageService: StorageService) { }
 
   async ngOnInit() {
     if (this.match.currentTurnPlayer === CONSTANTS.COMPUTER_PLAYER) {
@@ -90,6 +92,7 @@ export class BoardComponent implements OnInit {
   private checkGameOver() {
     if (this.match.winner) {
       alert('CONGRATULATIONS ' + this.match.winner + '!!!! Final score: ' + this.northPlayerScore + ' - ' + this.southPlayerScore);
+      this.storageService.clear();
       this.router.navigateByUrl('');
     }
   }

@@ -26,6 +26,10 @@ export class MatchService implements Resolve<Match> {
     return this.http.put<Match>(matchUrls.byId(matchId), { houseMoved });
   }
 
+  deactivate(matchId: number) {
+    return this.http.get(matchUrls.byId(`${matchId}/deactivate`));
+  }
+
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Match | Observable<Match> | Promise<Match> {
     return this.getMatchById(route.params.id);
   }

@@ -4,5 +4,5 @@ export const CONSTANTS = {
     default: 'en'
   },
   GAME_TIED: 'TIED',
-  COMPUTER_PLAYER: 'COMPUTER_PLAYER',
+  COMPUTER_PLAYER: 'COMPUTER',
 };

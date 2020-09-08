@@ -8,10 +8,10 @@
 
     <mat-card-actions>
       <div class="row center-xs">
-        <button mat-raised-button color="primary">
+        <button mat-raised-button color="primary" (click)="exit()">
           {{'match.exit' |translate}}
         </button>
-        <button mat-raised-button color="warn">
+        <button mat-raised-button color="warn" (click)="forfeit()">
           {{'match.forfeit' |translate}}
         </button>
       </div>
