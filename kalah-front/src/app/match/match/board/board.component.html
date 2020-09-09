@@ -5,20 +5,22 @@
 <div class="row center-xs">
 
   <div class="col-xs-2">
-    <app-house [playerStash]="true" [numberOfSeeds]="northPlayerScore" [scoreAbove]="true"></app-house>
+    <app-house [playerStash]="true" [numberOfSeeds]="match.northPlayerScore" [scoreAbove]="true"></app-house>
   </div>
 
   <div class="col-xs-8">
 
     <div class="row middle-xs">
 
-      <div *ngFor="let house of northPlayerBoard" class="col-xs-2 clickable" (click)="playMove(house)">
+      <div *ngFor="let house of northPlayerBoard" class="col-xs-2" (click)="playMove(house)"
+        [ngClass]="{ clickable: match.currentTurnPlayer === match.northPlayer, 'non-clickable': match.currentTurnPlayer !== match.northPlayer }">
         <div class="row">
           <app-house class="col-xs-12" [numberOfSeeds]="house.numberOfSeeds" [scoreAbove]="true"></app-house>
         </div>
       </div>
 
-      <div *ngFor="let house of southPlayerBoard" class="col-xs-2 clickable" (click)="playMove(house)">
+      <div *ngFor="let house of southPlayerBoard" class="col-xs-2" (click)="playMove(house)"
+        [ngClass]="{ clickable: match.currentTurnPlayer === match.southPlayer, 'non-clickable': match.currentTurnPlayer !== match.southPlayer }">
         <div class="row">
           <app-house class="col-xs-12" [numberOfSeeds]="house.numberOfSeeds"></app-house>
         </div>
@@ -29,7 +31,7 @@
   </div>
 
   <div class="col-xs-2">
-    <app-house [playerStash]="true" [numberOfSeeds]="southPlayerScore"></app-house>
+    <app-house [playerStash]="true" [numberOfSeeds]="match.southPlayerScore"></app-house>
   </div>
 </div>
 

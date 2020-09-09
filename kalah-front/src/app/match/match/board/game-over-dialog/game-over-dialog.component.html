@@ -1,0 +1,13 @@
+<h3 mat-dialog-title>
+  <div [ngSwitch]="data.winner">
+    <div *ngSwitchCase="'COMPUTER'">{{'game.over.title.loss' | translate}}</div>
+    <div *ngSwitchCase="'TIED'">{{'game.over.title.tie' | translate}}</div>
+    <div *ngSwitchDefault>{{ 'game.over.title.win' | translate :{player: data.winner} }}</div>
+  </div>
+</h3>
+<div mat-dialog-content class="full-width">
+  {{'game.over.result' | translate}}: {{data.southPlayer}} ({{data.southPlayerScore}}) - ({{data.northPlayerScore}}) {{data.northPlayer}}
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button (click)="close(false)" color="primary">{{'match.exit' | translate}}</button>
+</div>
