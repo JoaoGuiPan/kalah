@@ -2,6 +2,7 @@ package com.jpan.kalah.command;
 
 import com.jpan.kalah.common.Command;
 import com.jpan.kalah.dto.GameMatchDto;
+import org.springframework.util.StringUtils;
 
 import java.util.Random;
 
@@ -18,7 +19,7 @@ public class ComputerMoveCommand implements Command {
     @Override
     public void execute() {
 
-        if (this.currentMatch.getWinner() != null) {
+        if (StringUtils.isEmpty(this.currentMatch.getWinner())) {
 
             int houseIndex;
 
