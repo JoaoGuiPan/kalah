@@ -1,7 +1,7 @@
 # The kalah game
 
 Kalah, also called Kalaha or Mancala, is a game in the mancala family imported to the United States by William Julius Champion, Jr. in 1940.
-The game has many hundred variations, but this application uses the most traditional one. You can learn how to play and other information about the game at `https://en.wikipedia.org/wiki/Kalah`.
+The game has hundreds of variations, but this application uses the most traditional one. You can learn how to play and other information about the game at `https://en.wikipedia.org/wiki/Kalah`.
 
 # Building the Game
 
