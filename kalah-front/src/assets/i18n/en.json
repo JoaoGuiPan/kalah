@@ -1,5 +1,4 @@
 {
-  "language": "English",
   "header.title": "The Kalah Game",
   "header.menu.language": "Language",
   "home.title": "Welcome to the Kalah game",
@@ -8,5 +7,9 @@
   "home.multiplayer": "New offline multiplayer game",
   "match.exit": "Exit to main menu",
   "match.forfeit": "Forfeit",
-  "board.current": "Current turn"
+  "board.current": "Current turn",
+  "game.over.title.win": "{{player}} has won!",
+  "game.over.title.tie": "You tied!",
+  "game.over.title.loss": "You lost. Better luck next time!",
+  "game.over.result": "Final score is"
 }

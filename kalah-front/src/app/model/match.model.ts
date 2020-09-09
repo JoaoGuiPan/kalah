@@ -8,6 +8,8 @@ export interface Match {
   northPlayer: string;
   currentTurnPlayer: string;
   lastTurnTimestamp: Date;
-  isActive: boolean;
+  active: boolean;
   winner: string;
+  southPlayerScore: number;
+  northPlayerScore: number;
 }

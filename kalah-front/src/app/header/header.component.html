@@ -1,5 +1,24 @@
 <mat-toolbar color="primary">
-  <span>
-    {{'header.title' | translate}}
-  </span>
+  <div class="row full-width">
+    <div class="col-xs-6">
+      <span>
+        {{'header.title' | translate}}
+      </span>
+    </div>
+    <div class="col-xs-6">
+      <div class="row end-xs">
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+          <mat-icon>language</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="changeLanguage('en')">
+            English
+          </button>
+          <button mat-menu-item (click)="changeLanguage('nl')">
+            Nederlands
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+  </div>
 </mat-toolbar>

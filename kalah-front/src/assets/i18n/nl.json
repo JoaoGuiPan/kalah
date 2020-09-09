@@ -1,5 +1,4 @@
 {
-  "language": "Nederlands",
   "header.title": "Het Kalah-spel",
   "header.menu.language": "Taal",
   "home.title": "Welkom bij het Kalah-spel",
@@ -8,5 +7,9 @@
   "home.multiplayer": "Nieuw offline multiplayer-spel",
   "match.exit": "Ga terug naar het hoofdmenu",
   "match.forfeit": "Verbeuren",
-  "board.current": "Huidige beurt"
+  "board.current": "Huidige beurt",
+  "game.over.title.win": "{{player}} heeft gewonnen!",
+  "game.over.title.tie": "Je hebt gelijk gespeeld!",
+  "game.over.title.loss": "Je hebt verloren. Volgende keer beter!",
+  "game.over.result": "De uiteindelijke score is"
 }

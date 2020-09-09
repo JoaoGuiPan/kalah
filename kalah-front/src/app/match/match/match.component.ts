@@ -16,20 +16,26 @@ export class MatchComponent implements OnInit {
   constructor(route: ActivatedRoute,
               @Inject(LOCAL_STORAGE) private storageService: StorageService,
               private router: Router, private matchService: MatchService) {
-    route.data.subscribe(value => this.match = value.match);
+    route.data.subscribe((value: { match: Match }) => {
+      if (!value || !value.match || !value.match.active) {
+        this.storageService.clear();
+        this.router.navigateByUrl('');
+      }
+      this.match = value.match;
+    });
   }
 
   ngOnInit() {
   }
 
   exit() {
-    this.storageService.clear();
     this.router.navigateByUrl('');
   }
 
   forfeit() {
     this.matchService.deactivate(this.match.id).toPromise()
       .then(() => {
+        this.storageService.clear();
         this.exit();
       })
       .catch(err => console.error(err));
