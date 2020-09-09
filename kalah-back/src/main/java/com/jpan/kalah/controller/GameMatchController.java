@@ -69,9 +69,12 @@ public class GameMatchController {
         return playMatchTurn.update(match, turn.getHouseMoved());
     }
 
+    @ApiOperation(value = "Deactivate Match id.")
     @GetMapping("/{match}/deactivate")
     void deactivate(@PathVariable GameMatch match) {
-        match.setActive(false);
-        updateMatch.update(match);
+        if (match.isActive()) {
+            match.setActive(false);
+            updateMatch.update(match);
+        }
     }
 }
