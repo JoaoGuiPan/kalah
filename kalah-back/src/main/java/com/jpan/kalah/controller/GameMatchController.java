@@ -4,6 +4,7 @@ import com.jpan.kalah.common.CreateService;
 import com.jpan.kalah.common.ListRepository;
 import com.jpan.kalah.common.UpdateRepository;
 import com.jpan.kalah.common.UpdateService;
+import com.jpan.kalah.dto.EntityDtoMapper;
 import com.jpan.kalah.dto.GameMatchDto;
 import com.jpan.kalah.dto.StartGameDto;
 import com.jpan.kalah.dto.TurnDto;
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.jpan.kalah.dto.EntityDtoMapper.toDto;
 
 @Api(value = "Matches")
 @RestController
@@ -50,16 +54,16 @@ public class GameMatchController {
 
     @ApiOperation(value = "Fetch all Matches.")
     @GetMapping
-    List<GameMatch> getAll() {
+    List<GameMatchDto> getAll() {
         logger.info("Fetching all Matches");
-        return matchList.listAll();
+        return matchList.listAll().stream().map(EntityDtoMapper::toDto).collect(Collectors.toList());
     }
 
     @ApiOperation(value = "Fetch Match by id.")
     @GetMapping("/{match}")
-    GameMatch getById(@PathVariable GameMatch match) {
+    GameMatchDto getById(@PathVariable GameMatch match) {
         logger.info("Fetching Match ID " + match.getId());
-        return match;
+        return toDto(match);
     }
 
     @ApiOperation(value = "Execute move by Match id.")

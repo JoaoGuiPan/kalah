@@ -91,6 +91,38 @@ public class GameMatchDto {
         }
     }
 
+    @JsonGetter
+    public int getSouthPlayerScore() {
+        int score = 0;
+
+        GameHouseDto current = this.firstHouse;
+
+        do {
+            if (current.getPlayerName().equalsIgnoreCase(southPlayer) && current.isPlayerStash()) {
+                score += current.getNumberOfSeeds();
+            }
+            current = current.getNextHouse();
+        } while (current != this.firstHouse);
+
+        return score;
+    }
+
+    @JsonGetter
+    public int getNorthPlayerScore() {
+        int score = 0;
+
+        GameHouseDto current = this.firstHouse;
+
+        do {
+            if (current.getPlayerName().equalsIgnoreCase(northPlayer) && current.isPlayerStash()) {
+                score += current.getNumberOfSeeds();
+            }
+            current = current.getNextHouse();
+        } while (current != this.firstHouse);
+
+        return score;
+    }
+
     public GameHouseDto getHouse(final int index) {
         GameHouseDto current = this.firstHouse;
 
