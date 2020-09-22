@@ -41,6 +41,8 @@ public class PlayerMoveCommand implements Command {
 
         int seedsToSow = selected.getNumberOfSeeds();
 
+        selected.setNumberOfSeeds(0);
+
         for (int currentSeed = 1; currentSeed <= seedsToSow; currentSeed++) {
 
             next = requireNonNullElse(next, selected).getNextHouse();
@@ -62,8 +64,6 @@ public class PlayerMoveCommand implements Command {
                 seedsToSow++;
             }
         }
-
-        selected.setNumberOfSeeds(0);
 
         return finalSeedIsStash;
     }
